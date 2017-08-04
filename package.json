@@ -1,0 +1,29 @@
+{
+    "name": "@axiellalm/imu-api",
+    "version": "0.5.0",
+    "description": "IMu API for Axiell EMu systems",
+    "main": "IMu.js",
+    "engines" : {
+        "node" : ">=4.0.0"
+    },
+    "scripts": {
+        "lint": "jshint **/*.js"
+    },
+    "keywords": [
+        "EMu",
+        "IMu",
+        "API",
+        "Axiell",
+        "ALM"
+    ],
+    "author": "Axiell ALM",
+    "license": "KE Software Open Source Licence",
+    "dependencies": {
+        "bunyan": "^1.8.1",
+        "temp": "^0.8.3"
+    },
+    "devDependencies": {
+        "jshint": "latest",
+        "async": "^2.0.1"
+    }
+}
