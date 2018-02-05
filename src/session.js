@@ -227,11 +227,14 @@ Session.prototype.login = function(user, password, group, spawn, callback) {
  * @param  {Function} callback The callback fired upon response or error.
  */
 Session.prototype.logout = function(callback) {
+    var self = this;
     var content = {};
     content.logout = 1;
-    this.s.tracer.info({ event:'SessionLogout', context:this.s.context, request:content });
-    this.request(content, callback);
-    this.s.context = null;
+    self.s.tracer.info({ event:'SessionLogout', context:this.s.context, request:content });
+    self.request(content, function(err, response) {
+        self.s.context = null;
+        return callback(err, response);
+    });
 }
 
 /**
