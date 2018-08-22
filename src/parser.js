@@ -156,7 +156,7 @@ var saveBinaryData = function(self) {
 
     if (s.file == null) {
         s.IOWait = true;
-        
+
         // Create a temp file
         temp.open({prefix: 'imu-'}, function(err, info) {
             if (err)
@@ -195,7 +195,7 @@ var saveBinaryData = function(self) {
             readStream.on('open', function(fd) {
                 s.fileSize = 0;
                 s.value = readStream;
-                fs.unlink(s.file.path);
+                fs.unlink(s.file.path, function(e) {});
                 s.file.stream.end();
             });
         }
