@@ -1,6 +1,6 @@
 {
     "name": "@axiellalm/imu-api",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "IMu API for Axiell EMu systems",
     "main": "IMu.js",
     "engines" : {
@@ -24,6 +24,6 @@
     },
     "devDependencies": {
         "jshint": "latest",
-        "async": "^2.0.1"
+        "async": "^2.6.3"
     }
 }
