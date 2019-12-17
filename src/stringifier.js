@@ -3,7 +3,7 @@ var fs = require('fs');
 var util = require('util');
 var APIError = require('./error');
 
-var EOL = new Buffer('\r\n');
+var EOL = new Buffer.from('\r\n');
 
 var Stringifier = function(options) {
     Duplex.call(this, options);

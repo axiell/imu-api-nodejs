@@ -8,7 +8,7 @@ var APIError = require('./error');
 
 
 var encoding = 'utf8';
-var EOL = new Buffer('\r\n');
+var EOL = new Buffer.from('\r\n');
 var tx = /^[\u0020\t\n\r]*(?:([,:\[\]{}]|true|false|null)|(-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)|(?:\*(\d*))|"((?:[^\\\"]|\\(?:["\\\/trnfb]|u[0-9a-fA-F]{4}))*)")/;
 var nonws = /[^\u0020\t\n\r]/;
 var ws = /^[^\u0020\t\n\r]+$/;
@@ -54,8 +54,8 @@ function Parser(options)
 
     this.s = {
         // Buffers
-        buffer: Buffer(0),
-        binaryBuffer: Buffer(0),
+        buffer: Buffer.alloc(0),
+        binaryBuffer: Buffer.alloc(0),
         input: '',
 
         // Parser state
@@ -87,8 +87,8 @@ Parser.prototype._flush = function flush(callback) {
 }
 
 var initialise = function(self) {
-    self.s.buffer = new Buffer(0);
-    self.s.binaryBuffer = new Buffer(0);
+    self.s.buffer = new Buffer.alloc(0);
+    self.s.binaryBuffer = new Buffer.alloc(0);
     self.s.state = "go";
     self.s.input = '';
     self.s.file = null;
