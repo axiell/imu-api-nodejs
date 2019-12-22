@@ -99,12 +99,12 @@ Session.prototype.connect = function(callback) {
         self.s.tracer.info({ event:'SessionConnect', host:self.s.host, port:self.s.port, context:self.s.context });
         self.s.stream = new Stream(socket);
         socket.setTimeout(self.s.timeout);
-        return callback(null, self);
+        return process.nextTick(() => callback(null, self));
     });
     socket.on('error', function(err) {
         var error = new APIError('SessionError', err);
         self.s.tracer.error(error);
-        return callback(error);
+        return process.nextTick(() => callback(error));
     });
 }
 
