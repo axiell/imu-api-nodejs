@@ -1,3 +1,6 @@
+/*jshint node: true */
+"use strict";
+
 var Duplex = require('stream').Duplex;
 var fs = require('fs');
 var util = require('util');
@@ -15,19 +18,19 @@ var Stringifier = function(options) {
         buffer: [],
         iterator: null,
         file: false
-    }
-}
+    };
+};
 util.inherits(Stringifier, Duplex);
 
 Stringifier.prototype._write = function(object, encoding, callback) {
     this.s.buffer.push(object);
     this.resume(); // Resume now we have data.
     callback();
-}
+};
 
 Stringifier.prototype._read = function(size) {
     return read(this, size);
-}
+};
 
 var read = function(self, size) {
     var iterator;
@@ -66,7 +69,7 @@ var read = function(self, size) {
                 state.first[state.nested] = true;
                 break;
             case 'end-array':
-                output = ']'
+                output = ']';
                 --state.nested;
                 break;
             case 'function':
@@ -76,7 +79,7 @@ var read = function(self, size) {
                 if (current.value === undefined)
                     current.value = null; // IMu server dislikes undefined.
                 output = comma(state) + key(current) + JSON.stringify(current.value);
-                break
+                break;
         }
 
         length += output.length;
@@ -86,7 +89,7 @@ var read = function(self, size) {
     if (! current) {
         objectComplete(self);
     }
-}
+};
 
 var readFileStream = function(self, readSize, stream) {
     var fileReadStream = stream;
@@ -118,7 +121,7 @@ var readFileStream = function(self, readSize, stream) {
         }
     }
     self.pause();
-}
+};
 
 var getIterator = function(self) {
     if (! self.s.iterator) {
@@ -127,17 +130,17 @@ var getIterator = function(self) {
             self.s.state = {
                 nested: 0,
                 first: {}
-            }
+            };
             self.s.iterator = Iterator(object);
         }
     }
     return self.s.iterator;
-}
+};
 
 var objectComplete = function(self) {
     self.s.iterator = null;
     self.push();
-}
+};
 
 var comma = function(state) {
     var out = '';
@@ -146,14 +149,14 @@ var comma = function(state) {
     }
     state.first[state.nested] = false;
     return out;
-}
+};
 
 var key = function(current) {
     if (typeof current.key === 'string') {
-        return JSON.stringify(current.key) + ':'
+        return JSON.stringify(current.key) + ':';
     }
     return '';
-}
+};
 
 
 /**
@@ -176,8 +179,8 @@ var Iterator = function(root) {
             return {
                 type: type,
                 value: root
-            }
-        }
+            };
+        };
     }
     
     var next = makeNext(root);
@@ -188,7 +191,7 @@ var Iterator = function(root) {
                 return {
                     type: type,
                     value: root
-                }
+                };
                 break;
             case 'traversing':
                 if(! childIterator) {
@@ -217,7 +220,7 @@ var Iterator = function(root) {
                 return {
                     type: 'end-'+type,
                     value: root
-                }
+                };
             case 'ended':
                 return undefined;
                 break;
@@ -225,8 +228,8 @@ var Iterator = function(root) {
                 throw new APIError('StreamStringifyError'); // TODO: Perhaps shouldn't throw here...
                 break;
         }
-    }
-}
+    };
+};
 
 
 var makeNext = function(value) {
@@ -238,7 +241,7 @@ var makeNext = function(value) {
                 return;
             }
             return value[++getNext.key];
-        }
+        };
         getNext.key = -1;
     }
     else {
@@ -250,11 +253,11 @@ var makeNext = function(value) {
             }
             getNext.key = keys.shift();
             return value[getNext.key];
-        }
+        };
     }
     getNext.end = false;
     return getNext;   
-}
+};
 
 var isValue = function(type) {
     if (type === 'object' || type === 'array') {
@@ -262,7 +265,7 @@ var isValue = function(type) {
     }
     
     return true;
-}
+};
 
 var isReadableStream = function(node) {
     if (node === null || typeof node !== 'object')
@@ -270,7 +273,7 @@ var isReadableStream = function(node) {
     if (typeof node._read == 'function' && typeof node._readableState == 'object')
         return true;
     return false;
-}
+};
 
 var getType = function(node) {
     var type;
@@ -281,6 +284,6 @@ var getType = function(node) {
     else
         type = Array.isArray(node) ? 'array' : typeof node;
     return type;
-}
+};
 
-module.exports = Stringifier
+module.exports = Stringifier;

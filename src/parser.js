@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var util = require('util');
@@ -69,7 +70,7 @@ function Parser(options)
         key: null,
         value: null,
         next: null
-    }
+    };
 }
 util.inherits(Parser, Transform);
 
@@ -77,14 +78,13 @@ Parser.prototype._transform = function transform(chunk, encoding, callback) {
     this.s.buffer = Buffer.concat([this.s.buffer, chunk], this.s.buffer.length + chunk.length);
     this.s.next = callback;
     process(this);
-}
+};
 
 Parser.prototype._flush = function flush(callback) {
     this.s.finished = true;
     this.s.next = callback;
     process(this);
-
-}
+};
 
 var initialise = function(self) {
     self.s.buffer = new Buffer.alloc(0);
@@ -93,7 +93,7 @@ var initialise = function(self) {
     self.s.input = '';
     self.s.file = null;
     self.s.value = null;
-}
+};
 
 var process = function(self) {
     var s = self.s;
@@ -114,7 +114,7 @@ var process = function(self) {
     }
 
     s.next();
-}
+};
 
 var getInput = function(self) {
     var s = self.s;
@@ -137,7 +137,7 @@ var getInput = function(self) {
         return;
     }
     s.input = '';
-}
+};
 
 var getBinaryInput = function(self) {
     var s = self.s;
@@ -147,10 +147,10 @@ var getBinaryInput = function(self) {
         s.buffer = s.buffer.slice(index, s.buffer.length);
         s.bytesLeft -= index;
     }
-}
+};
 
 var saveBinaryData = function(self) {
-    var s = self.s
+    var s = self.s;
     if (! s.binaryBuffer.length)
         return;
 
@@ -200,7 +200,7 @@ var saveBinaryData = function(self) {
             });
         }
     }
-}
+};
 
 var parse = function(self) {
     var s = self.s;
@@ -265,13 +265,11 @@ var parse = function(self) {
     // If state isn't ok or values other than whitespace at the end then
     // JSON was malformed.
     if (s.state !== "ok" || nonws.test(s.input)) {
-        throw (s.state instanceof APIError)
-            ? s.state
-            : new APIError('StreamSyntaxError');
+        throw (s.state instanceof APIError) ? s.state : new APIError('StreamSyntaxError');
     }
 
     return true; // Successfully parsed
-}
+};
 
 var tokenActions = {
     string: {   // The actions for string tokens
@@ -478,10 +476,8 @@ var tokenActions = {
 var debackslashify = function(text)
 {
     return text.replace(/\\(?:u(.{4})|([^u]))/g, function (ignore, b, c) {
-        return b
-            ? String.fromCharCode(parseInt(b, 16))
-            : escapes[c];
+        return b ? String.fromCharCode(parseInt(b, 16)) : escapes[c];
     });
-}
+};
 
 module.exports = Parser;

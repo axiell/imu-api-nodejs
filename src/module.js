@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var util = require('util');
@@ -23,7 +24,7 @@ var Module = function(table, session, options) {
     self.s.table = table;
     self.s.create = table;
     self.s.name = 'Module';
-}
+};
 util.inherits(Module, Handler);
 
 Object.defineProperties(Module.prototype, {
@@ -47,7 +48,7 @@ Module.prototype.addFetchSet = function(name, columns, callback) {
     args.name = name;
     args.columns = columns;
     this.invoke('addFetchSet', args, callback);
-}
+};
 
 /**
  * 
@@ -57,7 +58,7 @@ Module.prototype.addFetchSet = function(name, columns, callback) {
  */
 Module.prototype.addFetchSets = function(sets, callback) {
     this.invoke('addFetchSets', sets, callback);
-}
+};
 
 /**
  * 
@@ -72,7 +73,7 @@ Module.prototype.addSearchAlias = function(name, columns, callback) {
     args.name = name;
     args.columns = columns;
     this.invoke('addSearchAlias', args, callback);
-}
+};
 
 /**
  * 
@@ -82,7 +83,7 @@ Module.prototype.addSearchAlias = function(name, columns, callback) {
  */
 Module.prototype.addSearchAliases = function(aliases, callback) {
     this.invoke('addSearchAliases', aliases, callback);
-}
+};
 
 /**
  * 
@@ -97,7 +98,7 @@ Module.prototype.addSortSet = function(name, columns, callback) {
     args.name = name;
     args.columns = columns;
     this.invoke('addSortSet', args, callback);
-}
+};
 
 /**
  * 
@@ -107,7 +108,7 @@ Module.prototype.addSortSet = function(name, columns, callback) {
  */
 Module.prototype.addSortSets = function(sets, callback) {
     this.invoke('addSortSets', sets, callback);
-}
+};
 
 /**
  * 
@@ -130,7 +131,7 @@ Module.prototype.fetch = function(flag, offset, count, columns, callback) {
     args.count = count;
     args.columns = columns;
     this.invoke('fetch', args, callback);
-}
+};
 
 /**
  * 
@@ -140,7 +141,7 @@ Module.prototype.fetch = function(flag, offset, count, columns, callback) {
  */
 Module.prototype.findKey = function(key, callback) {
     this.invoke('findKey', key, callback);
-}
+};
 
 /**
  * 
@@ -150,7 +151,7 @@ Module.prototype.findKey = function(key, callback) {
  */
 Module.prototype.findKeys = function(keys, callback) {
     this.invoke('findKeys', keys, callback);
-}
+};
 
 /**
  * 
@@ -162,7 +163,7 @@ Module.prototype.findTerms = function(terms, callback) {
     if (terms instanceof Terms)
         terms = terms.toArray();
     this.invoke('findTerms', terms, callback);
-}
+};
 
 /**
  * 
@@ -172,7 +173,7 @@ Module.prototype.findTerms = function(terms, callback) {
  */
 Module.prototype.findWhere = function(where, callback) {
     this.invoke('findWhere', where, callback);
-}
+};
 
 /**
  * 
@@ -192,7 +193,7 @@ Module.prototype.insert = function(values, columns, callback) {
     if (columns)
         args.columns = columns;
     this.invoke('insert', args, callback);
-}
+};
 
 /**
  * 
@@ -214,7 +215,7 @@ Module.prototype.remove = function(flag, offset, count, callback) {
     args.offset = offset;
     args.count = count;
     this.invoke('remove', args, callback);
-}
+};
 
 /**
  * 
@@ -227,7 +228,7 @@ Module.prototype.restoreFromFile = function(file, callback) {
 
     args.file = file;
     this.invoke('restoreFromFile', args, callback);
-}
+};
 
 /**
  * 
@@ -240,7 +241,7 @@ Module.prototype.restoreFromTemp = function(file, callback) {
 
     args.file = file;
     this.invoke('restoreFromTemp', args, callback);
-}
+};
 
 /**
  * 
@@ -259,7 +260,7 @@ Module.prototype.sort = function(columns, flags, callback) {
     args.columns = columns;
     args.flags = flags;
     this.invoke('sort', args, callback);
-}
+};
 
 /**
  * 
@@ -284,7 +285,7 @@ Module.prototype.update = function(flag, offset, count, values, columns, callbac
     args.values = values;
     args.columns = columns;
     this.invoke('update', args, callback);
-}
+};
 
 /**
  * 
@@ -293,6 +294,6 @@ Module.prototype.update = function(flag, offset, count, values, columns, callbac
  */
 Module.prototype.getTable = function() {
     return this.table;
-}
+};
 
 module.exports = Module;

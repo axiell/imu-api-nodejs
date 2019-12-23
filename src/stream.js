@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var net = require('net');
@@ -33,7 +34,7 @@ var Stream = function(socket) {
     socket.on('end', createListener(this, onEnd));
     socket.on('drain', createListener(this, onDrain));
     socket.on('timeout', createListener(this, onTimeout));
-}
+};
 
 /**
  * 
@@ -45,7 +46,7 @@ Stream.prototype.put = function(data, callback) {
     callback = callback || function(){};
     this.s.callbacks.push(callback);
     this.s.stringifier.write(data, encoding);
-}
+};
 
 /**
  * 
@@ -63,7 +64,7 @@ Stream.prototype.close = function(force) {
         this.s.socket.destroy();
         this.s.socket = null;
     }
-}
+};
 
 var invokeCallback = function(self, err, response) {
     var callback = self.s.callbacks.shift();
@@ -88,16 +89,16 @@ var invokeCallback = function(self, err, response) {
         
 
     return callback(null, response);
-}
+};
 
 var onData = function(response) {
     return invokeCallback(this, null, response);
-}
+};
 
 var onError = function(error) {
     this.s.tracer.error({ event:'StreamError', error: error.toString() });
     return invokeCallback(this, error);
-}
+};
 
 var onClose = function(had_error) {
     this.s.tracer.info({ event:'StreamClose'});
@@ -105,16 +106,16 @@ var onClose = function(had_error) {
         var error = new APIError('StreamTransmissionError');
         return invokeCallback(this, error);
     }
-}
+};
 
 var onEnd = function() {
     this.s.tracer.info({ event:'StreamEnded'});
     var error = new APIError('StreamEnded');
     return invokeCallback(this, error);
-}
+};
 
 var onDrain = function() {
-}
+};
 
 var onTimeout = function() {
     if (this.s.socket.destroyed)
@@ -124,10 +125,10 @@ var onTimeout = function() {
     this.s.tracer.info({ event:'StreamTimeout'});
     var error = new APIError('StreamTimeout');
     return invokeCallback(this, error);
-}
+};
 
 var createListener = function(self, handler) {
     return handler.bind(self);
-}
+};
 
 module.exports = Stream;
