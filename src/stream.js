@@ -43,9 +43,12 @@ var Stream = function(socket) {
  * @param {any} callback 
  */
 Stream.prototype.put = function(data, callback) {
+    var self = this;
     callback = callback || function(){};
-    this.s.callbacks.push(callback);
-    this.s.stringifier.write(data, encoding);
+    self.s.callbacks.push(callback);
+    process.nextTick(function() {
+        self.s.stringifier.write(data, encoding);
+    });
 };
 
 /**
