@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 /**
@@ -14,8 +15,8 @@ var Terms = function(kind) {
     this.s = {
         kind: kind,
         list: []
-    }
-}
+    };
+};
 
 Object.defineProperties(Terms.prototype, {
     'kind': {
@@ -37,15 +38,15 @@ Terms.prototype.addTerms = function(kind) {
     var child = new Terms(kind);
     this.s.list.push(child);
     return child;
-}
+};
 
 Terms.prototype.addAnd = function() {
     return this.addTerms('and');
-}
+};
 
 Terms.prototype.addOr = function() {
     return this.addTerms('or');
-}
+};
 
 Terms.prototype.toArray = function() {
     var result = [];
@@ -61,6 +62,6 @@ Terms.prototype.toArray = function() {
     result[1] = list;
 
     return result;
-}
+};
 
 module.exports = Terms;

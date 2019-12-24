@@ -1,4 +1,5 @@
-"use strict"
+/*jshint node: true */
+"use strict";
 
 var net = require('net');
 var Stream = require('./stream');
@@ -12,7 +13,7 @@ var defaults = {
     context: null,
     suspend: null,
     close: null
-}
+};
 
 /**
  * Creates a Session object which represents an IMu server connection.
@@ -40,8 +41,8 @@ var Session = function(options) {
         options: options,
         stream: null,
         tracer: trace()
-    }
-}
+    };
+};
 
 Object.defineProperties(Session.prototype, {
     'host': {
@@ -99,14 +100,18 @@ Session.prototype.connect = function(callback) {
         self.s.tracer.info({ event:'SessionConnect', host:self.s.host, port:self.s.port, context:self.s.context });
         self.s.stream = new Stream(socket);
         socket.setTimeout(self.s.timeout);
-        return callback(null, self);
+        return process.nextTick(function() {
+            callback(null, self);
+        });
     });
     socket.on('error', function(err) {
         var error = new APIError('SessionError', err);
         self.s.tracer.error(error);
-        return callback(error);
+        return process.nextTick(function() {
+            callback(error);
+        });
     });
-}
+};
 
 /**
  * Disconnect from IMu server
@@ -125,7 +130,7 @@ Session.prototype.disconnect = function() {
         // self.s.suspend = null;
         // self.s.close = null;
     });
-}
+};
 
 /**
  * Send request to IMu server
@@ -191,7 +196,7 @@ Session.prototype.request = function(request, callback) {
             return callback(null, response);
         });
     });
-}
+};
 
 /**
  * Login to IMu server
@@ -220,7 +225,7 @@ Session.prototype.login = function(user, password, group, spawn, callback) {
         logContent.password = 'xxxxxx';
     this.s.tracer.info({ event:'SessionLogin', context:this.s.context, request:logContent });
     this.request(content, callback);
-}
+};
 
 /**
  * Logout from IMu server
@@ -235,7 +240,7 @@ Session.prototype.logout = function(callback) {
         self.s.context = null;
         return callback(err, response);
     });
-}
+};
 
 /**
  * Check the status of IMu server
@@ -246,6 +251,6 @@ Session.prototype.checkStatus = function(callback) {
     content.checkStatus = 1;
     this.s.tracer.info({ event:'SessionCheckStatus', context:this.s.context, request:content });
     this.request(content, callback);
-}
+};
 
 module.exports = Session;

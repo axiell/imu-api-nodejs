@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var bunyan = require('bunyan')
@@ -19,6 +20,6 @@ var getTrace = function(options) {
     else
         trace = bunyan.createLogger(options);
     return trace;
-}
+};
 
 module.exports = getTrace;

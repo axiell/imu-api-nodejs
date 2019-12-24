@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var util = require('util');
@@ -16,9 +17,10 @@ var Terms = require('./terms');
  * @return {object} A Handler object.
  */
 var Modules = function(session, options) {
+    var self = this;
     Handler.call(self, session, options);
     this.s.name = 'Modules';
-}
+};
 util.inherits(Modules, Handler);
 
 
@@ -35,7 +37,7 @@ Modules.prototype.addFetchSet = function(name, set, callback) {
     args.name = name;
     args.set = set;
     this.invoke('addFetchSet', args, callback);
-}
+};
 
 /**
  * 
@@ -45,7 +47,7 @@ Modules.prototype.addFetchSet = function(name, set, callback) {
  */
 Modules.prototype.addFetchSets = function(sets, callback) {
     this.invoke('addFetchSets', sets, callback);
-}
+};
 
 /**
  * 
@@ -60,7 +62,7 @@ Modules.prototype.addSearchAlias = function(name, set, callback) {
     args.name = name;
     args.set = set;
     this.invoke('addSearchAlias', args, callback);
-}
+};
 
 /**
  * 
@@ -70,7 +72,7 @@ Modules.prototype.addSearchAlias = function(name, set, callback) {
  */
 Modules.prototype.addSearchAliases = function(aliases, callback) {
     this.invoke('addSearchAliases', aliases, callback);
-}
+};
 
 /**
  * 
@@ -85,7 +87,7 @@ Modules.prototype.addSortSet = function(name, set, callback) {
     args.name = name;
     args.set = set;
     this.invoke('addSortSet', args, callback);
-}
+};
 
 /**
  * 
@@ -95,7 +97,7 @@ Modules.prototype.addSortSet = function(name, set, callback) {
  */
 Modules.prototype.addSortSets = function(sets, callback) {
     this.invoke('addSortSets', sets, callback);
-}
+};
 
 /**
  * 
@@ -118,7 +120,7 @@ Modules.prototype.fetch = function(flag, offset, count, columns, callback) {
     args.count = count;
     args.columns = columns;
     this.invoke('fetch', args, callback);
-}
+};
 
 /**
  * 
@@ -135,7 +137,7 @@ Modules.prototype.findAttachments = function(table, column, key, callback) {
     args.column = column;
     args.key = key;
     this.invoke('findAttachments', args, callback);
-}
+};
 
 /**
  * 
@@ -154,7 +156,7 @@ Modules.prototype.findKeys = function(keys, include, callback) {
     args.keys = keys;
     args.include = include;
     this.invoke('findKeys', args, callback);
-}
+};
 
 /**
  * 
@@ -175,7 +177,7 @@ Modules.prototype.findTerms = function(terms, include, callback) {
     args.terms = terms;
     args.include = include;
     this.invoke('findTerms', args, callback);
-}
+};
 
 /**
  * 
@@ -184,7 +186,7 @@ Modules.prototype.findTerms = function(terms, include, callback) {
  */
 Modules.prototype.getAllHits = function(callback) {
     this.invoke('getAllHits', callback);
-}
+};
 
 /**
  * 
@@ -194,7 +196,7 @@ Modules.prototype.getAllHits = function(callback) {
  */
 Modules.prototype.getHits = function(module, callback) {
     this.invoke('getHits', module, callback);
-}
+};
 
 /**
  * 
@@ -213,7 +215,7 @@ Modules.prototype.restoreFromFile = function(file, module, callback) {
     args.file = file;
     args.module = module;
     this.invoke('restoreFromFile', args, callback);
-}
+};
 
 /**
  * 
@@ -232,7 +234,7 @@ Modules.prototype.restoreFromTemp = function(file, module, callback) {
     args.file = file;
     args.module = module;
     this.invoke('restoreFromTemp', args, callback);
-}
+};
 
 /**
  * 
@@ -242,7 +244,7 @@ Modules.prototype.restoreFromTemp = function(file, module, callback) {
  */
 Modules.prototype.setModules = function(list, callback) {
     this.invoke('setModules', list, callback);
-}
+};
 
 /**
  * 
@@ -262,6 +264,6 @@ Modules.prototype.sort = function(set, flags, callback) {
     args.set = set;
     args.flags = flags;
     this.invoke('sort', args, callback);
-}
+};
 
 module.exports = Modules;

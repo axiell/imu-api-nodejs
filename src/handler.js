@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var Session = require('./session');
@@ -8,7 +9,7 @@ var defaults = {
     id: null,
     language: null,
     name: null
-}
+};
 
 /**
  * Creates an IMu handler object.
@@ -35,8 +36,8 @@ var Handler = function(session, options) {
         language: options.language,
         name: options.name,
         options: options
-    }
-}
+    };
+};
 
 Object.defineProperties(Handler.prototype, {
     'session': {
@@ -87,7 +88,7 @@ Handler.prototype.invoke = function(method, params, callback) {
     if (params)
         request.params = params;
     this.request(request, callback);
-}
+};
 
 /**
  * @param  {object} [params]
@@ -118,7 +119,7 @@ Handler.prototype.request = function(request, callback) {
 
         return callback(null, response.result);
     });
-}
+};
 
 /**
  * Set handler values
@@ -127,6 +128,6 @@ Handler.prototype.request = function(request, callback) {
  */
 Handler.prototype.set = function(options) {
     this.s = Object.assign(this.s, options);
-}
+};
 
 module.exports = Handler;

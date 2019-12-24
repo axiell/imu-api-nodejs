@@ -1,54 +1,53 @@
 var IMu = require('../IMu');
-var async = require('async');
+var waterfall = require('async').waterfall;
 var fs = require('fs');
-var os = require('os');
 
-var session;
-var options = {host:'localhost', port:40000, timeout: 0, suspend: 1};
-IMu.connect(options, function(err, sess) {
-    if (err)
-        throw err;
-    session = sess;
-    console.log(session);
+var options = { host:'localhost', port:40000, timeout: 0, suspend: 1 };
+var session = new IMu.Session(options);
 
-    async.waterfall([
-        login,
+waterfall(
+    [
+        login('emu', 'password'),
         insert
-    ], function(err, response) {
-        if (err) {
-            console.log(err);
-            session.logout();
-            session.disconnect();            
-            return;
-        }
-        
-        console.log(response);
-        session.logout();
-        session.disconnect();
-        
-    });
-});
-
-function login(callback) {
-    session.login('emu', 'password', null, 0, function(err, response) {
+    ],
+    function(err, response) {
         if (err)
-            return callback(err);
+            console.log('Error:', err);
+        disconnect();
+    }
+);
 
-        callback();
+
+// Logout and disconnect from session
+function disconnect(callback) {
+    session.destroy = 1;
+    session.logout(function() {
+        session.disconnect(callback);
     });
 }
 
+// Create Multimedia Insert service handler process multimedia resource
 function insert(callback) {
     var findHandler = new IMu.Handler(session, {
         'name': 'Service::Multimedia::Insert',
         'destroy': 1,
         'language': 'en-US'
     });
-    var terms = new IMu.Terms('and');
-    terms.add('irn', '2', '=');
     findHandler.invoke('process', { 'fileName': 'testingInsert.mp4', 'fileData': fs.createReadStream('/path/to/file.mp4') }, function(err, response) {
         if (err)
             return callback(err);
-        callback(null, response);
+        return callback(null, response);
     });
+}
+
+// Create authenticated session
+function login(un, pw, grp) {
+    un = un || '';
+    pw = pw || '';
+    grp = grp || '';
+    return function(callback) {
+        session.login(un, pw, grp, 0, function(err, response) {
+            return callback(err);
+        });
+    };
 }

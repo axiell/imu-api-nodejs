@@ -1,69 +1,38 @@
 var IMu = require('../IMu');
-var async = require('async');
+var waterfall = require('async').waterfall;
 var fs = require('fs');
 var os = require('os');
 
-var session;
-var options = {host:'localhost', port:40000, timeout: 0, suspend: 1};
-IMu.connect(options, function(err, sess) {
-    if (err)
-        throw err;
-    session = sess;
-    console.log(session);
+var options = { host:'localhost', port:40000, timeout: 0, suspend: 1 };
+var session = new IMu.Session(options);
 
-    async.waterfall([
-        login,
-        find,
-        fetch
-    ], function(err, response) {
-        if (err) {
-            console.log(err);
-            session.logout(function logout() {});
-            session.disconnect();
-            return;
-        }
-        
-        console.log(response);
-        if (response.rows[0].multimedia) {
-            var resource = response.rows[0].multimedia[0].resource;
-            var fileReadStream = resource.file;
-            var fileWriteStream = fs.createWriteStream(os.tmpdir() + '/' + resource.identifier);
-            fileReadStream.pipe(fileWriteStream);
-        }
-        session.logout();
-        session.disconnect();
-    });
-});
+var terms = new IMu.Terms('and');
+terms.add('irn', '2', '=');
 
-function login(callback) {
-    session.login('emu', 'password', null, 0, function(err, response) {
+waterfall(
+    [
+        login('emu', 'password'),
+        find(terms),
+        fetch,
+        handleResult
+    ],
+    function(err, response) {
         if (err)
-            return callback(err);
+            console.log('Error:', err);
+        disconnect();        
+    }
+);
 
-        callback();
+
+// Logout and disconnect from session
+function disconnect(callback) {
+    session.destroy = 1;
+    session.logout(function() {
+        session.disconnect(callback);
     });
 }
 
-function find(callback) {
-    var findHandler = new IMu.Handler(session, {
-        'create': 'ecatalogue',
-        'name': 'Module',
-        'destroy': 0,
-        'language': 'en-US'
-    });
-    var terms = new IMu.Terms('and');
-    terms.add('irn', '2', '=');
-    findHandler.invoke('findTerms', { 'terms': terms.toArray() }, function(err, response) {
-        if (err)
-            return callback(err);
-
-        // We could use the same handler object for find/fetch, just illustrating the setting of id on handlers
-        // See queryModule for an example of using the same Handler (Module).
-        var id = findHandler.id;
-        callback(null, id);
-    });
-}
-
+// Fetch first 30 query results
 function fetch(id, callback) {
     var fetchHandler = new IMu.Handler(session);
     fetchHandler.id = id;
@@ -74,9 +43,51 @@ function fetch(id, callback) {
          'flag' : 'start',
          'offset': 0
     }, function(err, response) {
-        if (err)
-            return callback(err);
-
-        callback(null, response);
+        return callback(err, response);
     });
+}
+
+// Perform query
+function find(terms) {
+    return function(callback) {
+        var findHandler = new IMu.Handler(session, {
+            'create': 'ecatalogue',
+            'name': 'Module',
+            'destroy': 0,
+            'language': 'en-US'
+        });
+        findHandler.invoke('findTerms', { 'terms': terms.toArray() }, function(err, response) {
+            if (err)
+                return callback(err);
+
+            // We could use the same handler object for find/fetch, just illustrating the setting of id on handlers
+            // See queryModule for an example of using the same Handler (Module).
+            var id = findHandler.id;
+            return callback(null, id);
+        });
+    };
+}
+
+// Output query result and write resource to file
+function handleResult(result, callback) {
+    console.log('Result:', result);
+    if (result.count > 0 && result.rows[0].multimedia != undefined) {
+        var resource = result.rows[0].multimedia[0].resource;
+        var fileReadStream = resource.file;
+        var fileWriteStream = fs.createWriteStream(os.tmpdir() + '/' + resource.identifier);
+        fileReadStream.pipe(fileWriteStream);
+    }
+    return callback();
+}
+
+// Create authenticated session
+function login(un, pw, grp) {
+    un = un || '';
+    pw = pw || '';
+    grp = grp || '';
+    return function (callback) {
+        session.login(un, pw, grp, 0, function(err, response) {
+            return callback(err);
+        });
+    };
 }

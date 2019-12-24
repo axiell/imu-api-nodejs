@@ -1,3 +1,4 @@
+/*jshint node: true */
 "use strict";
 
 var util = require("util");
@@ -54,7 +55,7 @@ Luts.prototype.lookup = function(name, langid, level, keys, callback) {
     args.keys = keys;
 
     return this.invoke('lookup', args, callback);
-}
+};
 
 /**
  * 
@@ -87,9 +88,9 @@ Luts.prototype.hierarchy = function(name, langid, level, filter, callback) {
     args.name = name;
     args.langid = langid;
     args.level = level;
-    args.filter = filter
+    args.filter = filter;
 
     return this.invoke('hierarchy', args, callback);
-}
+};
 
 module.exports = Luts;
