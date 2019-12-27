@@ -25,5 +25,8 @@
     "devDependencies": {
         "async": "^2.6.3",
         "jshint": "latest"
+    },
+    "publishConfig": {
+        "registry": "https://nexus.melbourne.axiell.com:8443/repository/npm-hosted/"
     }
 }
