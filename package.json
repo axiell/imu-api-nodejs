@@ -4,7 +4,7 @@
     "description": "IMu API for Axiell EMu systems",
     "main": "IMu.js",
     "engines": {
-        "node": ">=4.0.0"
+        "node": ">=8.17.0"
     },
     "scripts": {
         "lint": "jshint **/*.js"
