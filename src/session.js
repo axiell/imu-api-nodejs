@@ -163,10 +163,11 @@ Session.prototype.request = function(request, callback) {
                 return callback(err);
 
             if (! response) {
-                var error = new APIError('SessionResponseError');
-                self.s.tracer.error(error);
-                return callback(error);
+                var sessionResponseError = new APIError('SessionResponseError');
+                self.s.tracer.error(sessionResponseError);
+                return callback(sessionResponseError);
             }
+
             if (response.context)
                 self.s.context = response.context;
             if (response.reconnect)
@@ -186,7 +187,7 @@ Session.prototype.request = function(request, callback) {
                 var args = '';
                 if (response.args)
                     args += response.args;
-                var code = undefined;
+                var code;
                 if (response.code)
                     code = response.code;
                 var error = new APIError(id, args, code);

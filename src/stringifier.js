@@ -53,7 +53,6 @@ var read = function(self, size) {
                 self.push(output);
                 var stream = current.value;
                 return readFileStream(self, size, stream);
-                break;
             case 'object':
                 output = comma(state) + key(current) + '{';
                 ++state.nested;
@@ -192,7 +191,6 @@ var Iterator = function(root) {
                     type: type,
                     value: root
                 };
-                break;
             case 'traversing':
                 if(! childIterator) {
                     var child = next();
@@ -223,10 +221,8 @@ var Iterator = function(root) {
                 };
             case 'ended':
                 return undefined;
-                break;
             default:
                 throw new APIError('StreamStringifyError'); // TODO: Perhaps shouldn't throw here...
-                break;
         }
     };
 };

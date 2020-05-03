@@ -1,7 +1,7 @@
 /*jshint node: true */
 "use strict";
 
-var bunyan = require('bunyan')
+var bunyan = require('bunyan');
 
 var trace;
 var getTrace = function(options) {
