@@ -471,7 +471,7 @@ var tokenActions = {
             }
         }
     }
-}
+};
 
 var debackslashify = function(text)
 {

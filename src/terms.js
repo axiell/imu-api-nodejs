@@ -32,7 +32,7 @@ Object.defineProperties(Terms.prototype, {
 Terms.prototype.add = function(name, value, op) {
     var term = [name, value, op];
     this.s.list.push(term);
-}
+};
 
 Terms.prototype.addTerms = function(kind) {
     var child = new Terms(kind);

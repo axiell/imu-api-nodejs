@@ -1,10 +1,10 @@
 {
     "name": "@axiellalm/imu-api",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "description": "IMu API for Axiell EMu systems",
     "main": "IMu.js",
     "engines": {
-        "node": ">=4.0.0"
+        "node": ">=8.17.0"
     },
     "scripts": {
         "lint": "jshint **/*.js"
@@ -25,5 +25,8 @@
     "devDependencies": {
         "async": "^2.6.3",
         "jshint": "latest"
+    },
+    "publishConfig": {
+        "registry": "https://nexus.melbourne.axiell.com:8443/repository/npm-hosted/"
     }
 }
