@@ -8,3 +8,7 @@ All notable changes to this project will be documented in this file.
 ## [0.5.2] - 2019-07-24
 ### Security
 - Updated dependencies to eliminate any transitive dependency on lodash < 4.17.13
+
+## [Unreleased]
+### Security
+- Update dependencies to eliminate prototype pollution through loadash < 4.17.19
