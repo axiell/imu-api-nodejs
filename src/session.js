@@ -116,8 +116,10 @@ Session.prototype.connect = function(callback) {
 /**
  * Disconnect from IMu server
  */
-Session.prototype.disconnect = function() {
-    var self = this;
+Session.prototype.disconnect = function(callback) {
+		var self = this;
+		callback = callback || function(){};
+
     self.s.tracer.info({ event:'SessionDisconnect', context:self.s.context });
 
     // Make sure any requests finish before disconnecting
@@ -128,7 +130,9 @@ Session.prototype.disconnect = function() {
         // Ensure session object can be reused
         self.s.stream = null;
         // self.s.suspend = null;
-        // self.s.close = null;
+				// self.s.close = null;
+				
+				callback();
     });
 };
 
