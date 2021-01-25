@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.6] - 2021-01-25
+### Changed
+- Added callback to Session disconnect method
+### Build
+- Update package dependencies
+
 ## [0.5.5] - 2020-07-24
 ### Security
 - Update dependencies to eliminate prototype pollution through loadash < 4.17.19
