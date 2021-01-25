@@ -19,12 +19,12 @@
     "author": "Axiell ALM",
     "license": "KE Software Open Source Licence",
     "dependencies": {
-        "bunyan": "^1.8.1",
+        "bunyan": "^1.8.15",
         "temp": "^0.8.3"
     },
     "devDependencies": {
         "async": "^2.6.3",
-        "jshint": "latest"
+        "jshint": "^2.12.0"
     },
     "publishConfig": {
         "registry": "https://nexus.melbourne.axiell.com:8443/repository/npm-hosted/"
